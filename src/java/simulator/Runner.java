@@ -1,5 +1,6 @@
 package java.simulator;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -13,10 +14,21 @@ public class Runner {
     /**
      * Validates command line arguments to ensure they are within the expected range(s).
      * @param args Command line arguments to parse.
-     * @return True if arguments are valid, false otherwise.
+     * @return ArrayList of Objects containing each validated parameter in their given order
+     * if parsed successfully, otherwise returns an empty ArrayList.
      */
-    private boolean validateArguments(String[] args) {
-        boolean argumentsValid = true;
-        return argumentsValid;
+    private ArrayList<Object> validateArguments(String[] args) {
+        ArrayList<Object> arguments = new ArrayList<>();
+
+        String inputFileName = args[0];
+        File inputFile = new File(inputFileName);
+        if (!inputFile.exists()) {
+            System.err.println(
+                    "Provided argument for 'file name' is not valid. The file does not exist");
+        }
+        else {
+            arguments.add(inputFile);
+        }
+        return arguments;
     }
 }
