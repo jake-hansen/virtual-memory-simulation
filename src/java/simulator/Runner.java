@@ -19,16 +19,25 @@ public class Runner {
      */
     private ArrayList<Object> validateArguments(String[] args) {
         ArrayList<Object> arguments = new ArrayList<>();
+        boolean argumentsValid = true;
 
         String inputFileName = args[0];
         File inputFile = new File(inputFileName);
         if (!inputFile.exists()) {
             System.err.println(
                     "Provided argument for 'file name' is not valid. The file does not exist");
+            argumentsValid = false;
         }
         else {
             arguments.add(inputFile);
         }
+
+        if (argumentsValid) {
+            for (int i = 1; i < args.length; i++) {
+                arguments.add(Integer.parseInt(args[i]));
+            }
+        }
+
         return arguments;
     }
 }
