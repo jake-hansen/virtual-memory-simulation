@@ -59,13 +59,14 @@ public class Cache {
         return (double) totalHits / ((double) totalMisses + (double) totalHits);
     }
 
+    /**
+     * Returns String representation of Cache.
+     * 
+     * @return Process number and hit ratio formatted nicely.
+     */
     @Override
     public String toString()
     {
         return String.format("Memory Cache for process: %s, hit ratio: %3.2f%%", processNumber, getRatio() * 100);
-    }
-
-    public int getProcessNumber() {
-        return processNumber;
     }
 }
