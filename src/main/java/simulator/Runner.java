@@ -1,27 +1,42 @@
 package main.java.simulator;
 
+import main.java.model.MemoryMap;
 import main.java.util.FileParser;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Runs the simulation.
  */
 public class Runner {
+
+    /** Keeps track of debug status. **/
+    public static boolean DEBUG = false;
+
     public static void main (String[] args) {
-        System.out.println("Welcome to virtual memory simulator");
-        System.out.println("Using file: " + args[0]);
-        System.out.println("Allocation for Process 1: " + args[1]);
-        System.out.println("Allocation for Process 2: " + args[2]);
-        System.out.println("Allocation for Process 3: " + args[3]);
-        System.out.println("Allocation for Process 4: " + args[4]);
         ArrayList<Object> parameters = validateArguments(args);
+
+        System.out.println("Welcome to virtual memory simulator");
+        if (DEBUG) System.out.println("You are in Debug mode.");
+        if (DEBUG) {
+            System.out.println("Using file: " + parameters.get(0));
+            System.out.println("Allocation for Process 1: " + args[1]);
+            System.out.println("Allocation for Process 2: " + args[2]);
+            System.out.println("Allocation for Process 3: " + args[3]);
+            System.out.println("Allocation for Process 4: " + args[4]);
+        }
+
         if (!parameters.isEmpty()) {
             FileParser fp = new FileParser((File) parameters.get(0));
             try {
-                System.out.println(fp.parseFile());
+                LinkedList<MemoryMap> mm = fp.parseFile();
+                if (DEBUG) {
+                    System.out.println(mm);
+                    System.out.print("Size of memory map: " + mm.size());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -53,7 +68,11 @@ public class Runner {
 
         if (argumentsValid) {
             for (int i = 1; i < args.length; i++) {
-                arguments.add(Integer.parseInt(args[i]));
+                if (args[i].equals("--debug")) {
+                    DEBUG = true;
+                } else {
+                    arguments.add(Integer.parseInt(args[i]));
+                }
             }
         }
 

@@ -39,4 +39,14 @@ public class MemoryMap {
     public int getFrameNumber() {
         return frameNumber;
     }
+
+    /**
+     * Returns string representation of object.
+     *
+     * @return String containing process number and frame number.
+     */
+    @Override
+    public String toString() {
+        return String.format("Process number %s, Frame Number: %s", this.processNumber, this.frameNumber);
+    }
 }
