@@ -49,4 +49,26 @@ public class MemoryMap {
     public String toString() {
         return String.format("Process number %s, Frame Number: %s", this.processNumber, this.frameNumber);
     }
+
+    /**
+     * Compares Object with this to test if they are equal. Two MemoryMap objects
+     * are said to be equal if their frame numbers and process numbers are the same.
+     * @param o Object to compare to.
+     * @return True if o and this instance are equal, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof MemoryMap)) {
+            return false;
+        }
+
+        MemoryMap c = (MemoryMap) o;
+
+        return Integer.compare(c.frameNumber, this.frameNumber) == 0 &&
+                Integer.compare(c.processNumber, this.processNumber) == 0;
+    }
 }
