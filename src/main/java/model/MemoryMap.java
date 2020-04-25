@@ -1,4 +1,4 @@
-package java.model;
+package main.java.model;
 
 /**
  * Represents a mapping of process numbers to frame numbers.

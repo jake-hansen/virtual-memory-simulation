@@ -1,10 +1,9 @@
-package java.util;
+package main.java.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.model.MemoryMap;
+import java.io.*;
+import main.java.model.MemoryMap;
+
+import java.util.LinkedList;
 
 /** Utilities for parsing input file. **/
 public class FileParser {
@@ -29,10 +28,21 @@ public class FileParser {
      *
      * @return LinkedList<MemoryMap> containing memory mapping from file.
      * @throws FileNotFoundException Thrown when file is not found.
+     * @throws IOException
      */
-    public LinkedList<MemoryMap> parseFile() throws FileNotFoundException {
+    public LinkedList<MemoryMap> parseFile() throws IOException {
         LinkedList<MemoryMap> returnMap = new LinkedList<>();
         BufferedReader br = new BufferedReader(new FileReader(this.inputFile));
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            int processNumber, frameNumber;
+            String[] split = line.split("\\s+");
+            processNumber = Integer.parseInt(split[0]);
+            frameNumber = Integer.parseInt(split[1]);
+            MemoryMap mm = new MemoryMap(processNumber, frameNumber);
+            returnMap.add(mm);
+        }
 
         return returnMap;
     }
