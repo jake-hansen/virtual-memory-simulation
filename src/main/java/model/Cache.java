@@ -61,7 +61,7 @@ public class Cache {
 
     /**
      * Returns String representation of Cache.
-     * 
+     *
      * @return Process number and hit ratio formatted nicely.
      */
     @Override

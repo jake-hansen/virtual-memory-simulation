@@ -50,9 +50,14 @@ public class Runner {
                 cacheList.get(mm.getProcessNumber() - 1).process(mm);
             }
 
+            double average = 0.0;
             for (Cache c : cacheList) {
                 System.out.println(c);
+                average += c.getRatio();
             }
+            average /= cacheList.size();
+            System.out.printf("Average: %3.2f%%", average * 100);
+
         } else {
             System.err.println("Arguments are not valid. Please see usage.");
         }
