@@ -3,13 +3,16 @@ package main.java.util;
 import java.io.*;
 import main.java.model.MemoryMap;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /** Utilities for parsing input file. **/
 public class FileParser {
 
     /** File to parse. **/
-    private File inputFile;
+    private final File inputFile;
+
+    private LinkedList<MemoryMap> fileMemoryMap;
 
     /**
      * Default constructor sets input file.
@@ -31,7 +34,6 @@ public class FileParser {
      * @throws IOException
      */
     public LinkedList<MemoryMap> parseFile() throws IOException {
-        LinkedList<MemoryMap> returnMap = new LinkedList<>();
         BufferedReader br = new BufferedReader(new FileReader(this.inputFile));
 
         String line;
@@ -41,9 +43,28 @@ public class FileParser {
             processNumber = Integer.parseInt(split[0]);
             frameNumber = Integer.parseInt(split[1]);
             MemoryMap mm = new MemoryMap(processNumber, frameNumber);
-            returnMap.add(mm);
+            fileMemoryMap.add(mm);
         }
 
-        return returnMap;
+        return fileMemoryMap;
+    }
+
+    /**
+     * Retrieves all the unique process numbers for the given file.
+     * @return List of unique process numbers.
+     * @throws IOException Thrown if there is an error parsing the file.
+     */
+    public ArrayList<Integer> getProcessNumbers() throws IOException {
+        if (fileMemoryMap == null) {
+            parseFile();
+        }
+        ArrayList<Integer> processNumbers = new ArrayList<>();
+        for (MemoryMap mm : fileMemoryMap) {
+            if (!processNumbers.contains(mm.getProcessNumber())) {
+                processNumbers.add(mm.getProcessNumber());
+            }
+        }
+
+        return processNumbers;
     }
 }
