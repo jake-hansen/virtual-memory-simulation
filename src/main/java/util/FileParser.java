@@ -14,6 +14,8 @@ public class FileParser {
 
     private final LinkedList<MemoryMap> fileMemoryMap;
 
+    private final ArrayList<Integer> processNumbers;
+
     /**
      * Default constructor sets input file.
      *
@@ -22,6 +24,7 @@ public class FileParser {
     public FileParser(File inputFile) {
         this.inputFile = inputFile;
         fileMemoryMap = new LinkedList<>();
+        processNumbers = new ArrayList<>();
     }
 
     /**
@@ -55,17 +58,24 @@ public class FileParser {
      * @return List of unique process numbers.
      * @throws IOException Thrown if there is an error parsing the file.
      */
-    public ArrayList<Integer> getProcessNumbers() throws IOException {
+    public ArrayList<Integer> parseProcessNumbers() throws IOException {
         if (fileMemoryMap.isEmpty()) {
             parseFile();
         }
-        ArrayList<Integer> processNumbers = new ArrayList<>();
         for (MemoryMap mm : fileMemoryMap) {
             if (!processNumbers.contains(mm.getProcessNumber())) {
                 processNumbers.add(mm.getProcessNumber());
             }
         }
 
+        return processNumbers;
+    }
+
+    public LinkedList<MemoryMap> getFileMemoryMap() {
+        return fileMemoryMap;
+    }
+
+    public ArrayList<Integer> getProcessNumbers() {
         return processNumbers;
     }
 }

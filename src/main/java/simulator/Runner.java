@@ -17,40 +17,41 @@ public class Runner {
     /** Keeps track of debug status. **/
     public static boolean DEBUG = false;
 
+    private static FileParser fp;
+
     public static void main (String[] args) {
+        System.out.println("Welcome to virtual memory simulator");
         ArrayList<Object> parameters = validateArguments(args);
 
-        System.out.println("Welcome to virtual memory simulator");
         if (DEBUG) System.out.println("You are in Debug mode.");
         if (DEBUG) {
             System.out.println("Using file: " + parameters.get(0));
-            for (int i = 0; i < parameters.size(); i++) {
+            for (int i = 1; i < parameters.size(); i++) {
                 if (parameters.get(i) instanceof Integer) {
-                    System.out.println("Allocation size of process " + i + ": " + parameters.get(i));
+                    System.out.println("Allocation size of process " + fp.getProcessNumbers().get(i - 1) + ": " + parameters.get(i));
                 }
             }
         }
 
         if (!parameters.isEmpty()) {
-            FileParser fp = new FileParser((File) parameters.get(0));
-            try {
-                LinkedList<MemoryMap> mml = fp.parseFile();
-                if (DEBUG) {
-                    System.out.println(mml);
-                    System.out.println("Size of memory map: " + mml.size());
 
-                    Cache process1Cache = new Cache((int) parameters.get(1));
+            LinkedList<MemoryMap> mml = fp.getFileMemoryMap();
+            if (DEBUG) {
+                System.out.println(mml);
+                System.out.println("Size of memory map: " + mml.size());
+            }
 
-                    for (MemoryMap mm : mml) {
-                        if (mm.getProcessNumber() == 1) {
-                            process1Cache.process(mm);
-                        }
-                    }
+            ArrayList<Cache> cacheList = new ArrayList<>();
+            for (int i = 0; i < fp.getProcessNumbers().size(); i++) {
+                cacheList.add(new Cache((int) parameters.get(i + 1), fp.getProcessNumbers().get(i)));
+            }
 
-                    System.out.println(process1Cache.getRatio());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (MemoryMap mm : mml) {
+                cacheList.get(mm.getProcessNumber() - 1).process(mm);
+            }
+
+            for (Cache c : cacheList) {
+                System.out.println(c);
             }
         } else {
             System.err.println("Arguments are not valid. Please see usage.");
@@ -89,9 +90,9 @@ public class Runner {
         }
 
         if (argumentsValid) {
-            FileParser fp = new FileParser((File) arguments.get(0));
+            fp = new FileParser((File) arguments.get(0));
             try {
-                int numberOfProcesses = fp.getProcessNumbers().size();
+                int numberOfProcesses = fp.parseProcessNumbers().size();
                 if (numberOfProcesses != (arguments.size() - 1)) {
                     System.err.println("Number of allocations does not match the " +
                             "number of processes in the given file. ");

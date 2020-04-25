@@ -17,14 +17,19 @@ public class Cache {
     /** Size limit for cache. **/
     private final int size;
 
+    /** Process number this cache manages **/
+    private final int processNumber;
+
     /**
-     * Constructor for cache that takes size limit for cache as parameter.
+     * Constructor for cache that takes size limit and processNumber for cache as parameter.
      *
      * @param size Size limit for cache.
+     * @param processNumber Process number this cache will manage.
      */
-    public Cache(int size) {
+    public Cache(int size, int processNumber) {
         this.size = size;
         queue = new LinkedList<>();
+        this.processNumber = processNumber;
     }
 
     /**
@@ -52,5 +57,15 @@ public class Cache {
      */
     public double getRatio() {
         return (double) totalHits / ((double) totalMisses + (double) totalHits);
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Memory Cache for process: %s, hit ratio: %3.2f%%", processNumber, getRatio() * 100);
+    }
+
+    public int getProcessNumber() {
+        return processNumber;
     }
 }
