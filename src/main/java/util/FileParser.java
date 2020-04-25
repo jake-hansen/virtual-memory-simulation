@@ -12,7 +12,7 @@ public class FileParser {
     /** File to parse. **/
     private final File inputFile;
 
-    private LinkedList<MemoryMap> fileMemoryMap;
+    private final LinkedList<MemoryMap> fileMemoryMap;
 
     /**
      * Default constructor sets input file.
@@ -21,6 +21,7 @@ public class FileParser {
      */
     public FileParser(File inputFile) {
         this.inputFile = inputFile;
+        fileMemoryMap = new LinkedList<>();
     }
 
     /**
@@ -55,7 +56,7 @@ public class FileParser {
      * @throws IOException Thrown if there is an error parsing the file.
      */
     public ArrayList<Integer> getProcessNumbers() throws IOException {
-        if (fileMemoryMap == null) {
+        if (fileMemoryMap.isEmpty()) {
             parseFile();
         }
         ArrayList<Integer> processNumbers = new ArrayList<>();

@@ -24,10 +24,11 @@ public class Runner {
         if (DEBUG) System.out.println("You are in Debug mode.");
         if (DEBUG) {
             System.out.println("Using file: " + parameters.get(0));
-            System.out.println("Allocation for Process 1: " + args[1]);
-            System.out.println("Allocation for Process 2: " + args[2]);
-            System.out.println("Allocation for Process 3: " + args[3]);
-            System.out.println("Allocation for Process 4: " + args[4]);
+            for (int i = 0; i < parameters.size(); i++) {
+                if (parameters.get(i) instanceof Integer) {
+                    System.out.println("Allocation size of process " + i + ": " + parameters.get(i));
+                }
+            }
         }
 
         if (!parameters.isEmpty()) {
@@ -86,6 +87,23 @@ public class Runner {
                 }
             }
         }
+
+        if (argumentsValid) {
+            FileParser fp = new FileParser((File) arguments.get(0));
+            try {
+                int numberOfProcesses = fp.getProcessNumbers().size();
+                if (numberOfProcesses != (arguments.size() - 1)) {
+                    System.err.println("Number of allocations does not match the " +
+                            "number of processes in the given file. ");
+                    argumentsValid = false;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!argumentsValid) arguments.clear();
 
         return arguments;
     }
