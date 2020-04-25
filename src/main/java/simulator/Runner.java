@@ -1,5 +1,6 @@
 package main.java.simulator;
 
+import main.java.model.Cache;
 import main.java.model.MemoryMap;
 import main.java.util.FileParser;
 
@@ -32,10 +33,20 @@ public class Runner {
         if (!parameters.isEmpty()) {
             FileParser fp = new FileParser((File) parameters.get(0));
             try {
-                LinkedList<MemoryMap> mm = fp.parseFile();
+                LinkedList<MemoryMap> mml = fp.parseFile();
                 if (DEBUG) {
-                    System.out.println(mm);
-                    System.out.print("Size of memory map: " + mm.size());
+                    System.out.println(mml);
+                    System.out.println("Size of memory map: " + mml.size());
+
+                    Cache process1Cache = new Cache((int) parameters.get(1));
+
+                    for (MemoryMap mm : mml) {
+                        if (mm.getProcessNumber() == 1) {
+                            process1Cache.process(mm);
+                        }
+                    }
+
+                    System.out.println(process1Cache.getRatio());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
