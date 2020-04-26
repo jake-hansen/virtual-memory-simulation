@@ -73,39 +73,44 @@ public class Runner {
         ArrayList<Object> arguments = new ArrayList<>();
         boolean argumentsValid = true;
 
-        String inputFileName = args[0];
-        File inputFile = new File(inputFileName);
-        if (!inputFile.exists()) {
-            System.err.println(
-                    "Provided argument for 'file name' is not valid. The file does not exist");
+        if (args.length == 0 || args.length == 1) {
+            System.err.println("Not enough arguments specified.");
             argumentsValid = false;
-        }
-        else {
-            arguments.add(inputFile);
-        }
+        } else {
+            String inputFileName = args[0];
+            File inputFile = new File(inputFileName);
+            if (!inputFile.exists()) {
+                System.err.println(
+                        "Provided argument for 'file name' is not valid. The file does not exist");
+                argumentsValid = false;
+            }
+            else {
+                arguments.add(inputFile);
+            }
 
-        if (argumentsValid) {
-            for (int i = 1; i < args.length; i++) {
-                if (args[i].equals("--debug")) {
-                    DEBUG = true;
-                } else {
-                    arguments.add(Integer.parseInt(args[i]));
+            if (argumentsValid) {
+                for (int i = 1; i < args.length; i++) {
+                    if (args[i].equals("--debug")) {
+                        DEBUG = true;
+                    } else {
+                        arguments.add(Integer.parseInt(args[i]));
+                    }
                 }
             }
-        }
 
-        if (argumentsValid) {
-            fp = new FileParser((File) arguments.get(0));
-            try {
-                int numberOfProcesses = fp.parseProcessNumbers().size();
-                if (numberOfProcesses != (arguments.size() - 1)) {
-                    System.err.println("Number of allocations does not match the " +
-                            "number of processes in the given file. ");
-                    argumentsValid = false;
+            if (argumentsValid) {
+                fp = new FileParser((File) arguments.get(0));
+                try {
+                    int numberOfProcesses = fp.parseProcessNumbers().size();
+                    if (numberOfProcesses != (arguments.size() - 1)) {
+                        System.err.println("Number of allocations does not match the " +
+                                "number of processes in the given file. ");
+                        argumentsValid = false;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
 
